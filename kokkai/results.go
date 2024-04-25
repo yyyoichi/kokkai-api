@@ -14,7 +14,7 @@ type KaniResult struct {
 		MeetingRecord      []struct {
 			IssueID       string `json:"issueID"`       // 会議録ID
 			ImageKind     string `json:"imageKind"`     // イメージ種別（会議録・目次・索引・附録・追録）
-			SearchObject  string `json:"searchObject"`  // 検索対象箇所（議事冒頭・本文）
+			SearchObject  int    `json:"searchObject"`  // 検索対象箇所（議事冒頭・本文）
 			Session       int    `json:"session"`       // 国会回次
 			NameOfHouse   string `json:"nameOfHouse"`   // 院名
 			NameOfMeeting string `json:"nameOfMeeting"` // 会議名
@@ -46,7 +46,7 @@ type KaigiResult struct {
 		MeetingRecord      []struct {
 			IssueID       string `json:"issueID"`       // 会議録ID
 			ImageKind     string `json:"imageKind"`     // イメージ種別（会議録・目次・索引・附録・追録）
-			SearchObject  string `json:"searchObject"`  // 検索対象箇所（議事冒頭・本文）
+			SearchObject  int    `json:"searchObject"`  // 検索対象箇所（議事冒頭・本文）
 			Session       int    `json:"session"`       // 国会回次
 			NameOfHouse   string `json:"nameOfHouse"`   // 院名
 			NameOfMeeting string `json:"nameOfMeeting"` // 会議名
@@ -77,18 +77,18 @@ type KaigiResult struct {
 type HatsugenResult struct {
 	URI    string
 	Err    error
-	Result []struct {
+	Result struct {
 		Message            string   `json:"message"`            // エラーメッセージ
 		Details            []string `json:"details"`            // エラーメッセージの詳細（※検索条件の入力誤りの場合のみ、※検索条件の入力誤りが複数ある場合のみ）
 		NumberOfRecords    int      `json:"numberOfRecords"`    // 総結果件数
 		NumberOfReturn     int      `json:"numberOfReturn"`     // 返戻件数
 		StartRecord        int      `json:"startRecord"`        // 開始位置
 		NextRecordPosition int      `json:"nextRecordPosition"` // 次開始位置
-		SpeechRecord       struct {
+		SpeechRecord       []struct {
 			SpeechID        string `json:"speechID"`        // 発言ID
 			IssueID         string `json:"issueID"`         // 会議録ID
 			ImageKind       string `json:"imageKind"`       // イメージ種別（会議録・目次・索引・附録・追録）
-			SearchObject    string `json:"searchObject"`    // 検索対象箇所（議事冒頭・本文）
+			SearchObject    int    `json:"searchObject"`    // 検索対象箇所（議事冒頭・本文）
 			Session         int    `json:"session"`         // 国会回次
 			NameOfHouse     string `json:"nameOfHouse"`     // 院名
 			NameOfMeeting   string `json:"nameOfMeeting"`   // 会議名
