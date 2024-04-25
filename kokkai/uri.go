@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	KaniURI     = "https://kokkai.ndl.go.jp/api/meeting"
-	KaigiURI    = "https://kokkai.ndl.go.jp/api/meeting_list"
+	KaniURI     = "https://kokkai.ndl.go.jp/api/meeting_list"
+	KaigiURI    = "https://kokkai.ndl.go.jp/api/meeting"
 	HatsugenURI = "https://kokkai.ndl.go.jp/api/speech"
 )
 
