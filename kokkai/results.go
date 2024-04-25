@@ -32,6 +32,8 @@ type KaniResult struct {
 	}
 }
 
+func (r *KaniResult) NextRecordPosition() int { return r.Result.NextRecordPosition }
+
 // 会議単位出力
 type KaigiResult struct {
 	URI    string
@@ -73,6 +75,8 @@ type KaigiResult struct {
 	}
 }
 
+func (r *KaigiResult) NextRecordPosition() int { return r.Result.NextRecordPosition }
+
 // 発言単位出力
 type HatsugenResult struct {
 	URI    string
@@ -109,3 +113,5 @@ type HatsugenResult struct {
 		} `json:"speechRecord"` // 発言情報
 	}
 }
+
+func (r *HatsugenResult) NextRecordPosition() int { return r.Result.NextRecordPosition }

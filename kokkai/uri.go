@@ -29,6 +29,10 @@ type Params struct {
 	values url.Values
 }
 
+func NewParam() Params {
+	return Params{values: url.Values{}}
+}
+
 func (p *Params) encode() string {
 	p.values.Add("recordPacking", "json")
 	return p.values.Encode()
@@ -37,6 +41,12 @@ func (p *Params) encode() string {
 // 開始位置	検索結果の取得開始位置を「1～検索件数」の範囲で指定可能。
 // 省略時のデフォルト値は「1」
 func (p *Params) StartRecord(val int) {
+	p.values.Add("startRecord", strconv.Itoa(val))
+}
+
+// 開始位置 の再設定。
+func (p *Params) ResetStartRecord(val int) {
+	p.values.Del("startRecord")
 	p.values.Add("startRecord", strconv.Itoa(val))
 }
 
