@@ -1,9 +1,9 @@
 {
 	"name": "GoKokkaiAPIDevContainer",
-	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/go:1": {
-			"version": "1.22"
+			"version": "1.23"
 		}
 	},
 	"workspaceFolder": "/workspaces/kokkai-api",
