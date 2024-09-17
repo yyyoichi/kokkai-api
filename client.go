@@ -56,6 +56,7 @@ type result interface {
 	getNextRecordPosition() int
 }
 
+// uriを受け取るだけ再帰的にリクエストを実行する。
 func (c *Client[T]) IterRequest(ctx context.Context, uriIter iter.Seq[string]) iter.Seq2[T, error] {
 	return func(yield func(T, error) bool) {
 		for uri := range uriIter {
@@ -71,6 +72,12 @@ func (c *Client[T]) IterRequest(ctx context.Context, uriIter iter.Seq[string]) i
 			}
 		}
 	}
+}
+
+// 一度だけリクエストを実行する。
+func (c *Client[T]) DoRequest(ctx context.Context, uri string) (T, error) {
+	var val = c.NewResultFunc()
+	return val, requestApi(c.HttpClient, uri, val)
 }
 
 type httpClient interface {

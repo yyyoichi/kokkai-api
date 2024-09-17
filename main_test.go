@@ -57,3 +57,23 @@ func ExampleIterResult() {
 	// Output:
 	// numberOfReturn 0
 }
+
+func ExampleGetResult() {
+	// 国会回次209の科学技術に関する議事録を「会議単位簡易出力」で一度だけ取得する。
+	p := kokkaiapi.NewParam()
+	p.Any("科学技術")
+	p.RecordPacking("json")
+	p.SessionFrom(209)
+	p.SessionTo(209)
+	p.MaximumRecords(10)
+	// exp return 7 records
+	for result, err := range kokkaiapi.IterKaniResult(p) {
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("numberOfReturn", result.NumberOfReturn)
+	}
+
+	// Output:
+	// numberOfReturn 7
+}

@@ -71,3 +71,9 @@ func IterResult[T result](p Param, r Request[T]) iter.Seq2[T, error] {
 		}
 	}
 }
+
+// 任意のリクエスト構造体から議事録を取得する。
+func GetResult[T result](p Param, r Request[T]) (T, error) {
+	uri := ConstructURI(string(r.Generator), p)
+	return r.Client.DoRequest(context.Background(), uri)
+}
