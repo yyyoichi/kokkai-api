@@ -60,15 +60,15 @@ type result interface {
 func (c *Client[T]) IterRequest(ctx context.Context, uriIter iter.Seq[string]) iter.Seq2[T, error] {
 	return func(yield func(T, error) bool) {
 		for uri := range uriIter {
+			var val = c.NewResultFunc()
+			err := requestApi(c.HttpClient, uri, val)
+			if ok := yield(val, err); !ok {
+				return
+			}
 			select {
 			case <-ctx.Done():
 				return
 			case <-time.After(c.Interval):
-				var val = c.NewResultFunc()
-				err := requestApi(c.HttpClient, uri, val)
-				if ok := yield(val, err); !ok {
-					return
-				}
 			}
 		}
 	}
