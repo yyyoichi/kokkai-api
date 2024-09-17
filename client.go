@@ -11,16 +11,19 @@ import (
 
 var (
 	defaultInterval = time.Duration(1 * time.Second)
-	KaniClient      = Client[*KaniResult]{
+	// 「会議単位簡易出力」を取得するクライアント
+	KaniClient = Client[*KaniResult]{
 		HttpClient:    http.DefaultClient,
 		Interval:      defaultInterval,
 		NewResultFunc: func() *KaniResult { return new(KaniResult) },
 	}
+	// 「会議単位出力」を取得するクライアント
 	KaigiClient = Client[*KaigiResult]{
 		HttpClient:    http.DefaultClient,
 		Interval:      defaultInterval,
 		NewResultFunc: func() *KaigiResult { return new(KaigiResult) },
 	}
+	// 「発言単位出力」を取得するクライアント
 	HatsugenClient = Client[*HatsugenResult]{
 		HttpClient:    http.DefaultClient,
 		Interval:      defaultInterval,
@@ -28,9 +31,24 @@ var (
 	}
 )
 
+// 国会議事録APIにリクエストを行う構造体。
 type Client[T result] struct {
-	HttpClient    httpClient
-	Interval      time.Duration
+	// httpリクエストを実行する構造体。
+	//
+	// 下記の、`httpClient`を満たす構造体が必要。
+	//
+	// type httpClient interface {
+	// 	Get(string) (*http.Response, error)
+	// }
+	//
+	HttpClient httpClient
+	// APIにアクセスするインターバル。
+	//
+	// [国会会議録検索システム　検索用APIの仕様](https://kokkai.ndl.go.jp/api.html)では、アクセスの間隔に数秒間を置くことが推奨されている。
+	//
+	// デフォルトで1秒間としている。
+	Interval time.Duration
+	// レスポンス構造体を初期化する関数。
 	NewResultFunc func() T
 }
 

@@ -1,43 +1,52 @@
 # kokkai-api
 
-国会議事録検索用APIのラッパー
+国会議事録検索用APIのGo言語ラッパー
 
 <https://kokkai.ndl.go.jp/api.html>
 
-## サポート
+## Supports
 
-議事の全件取得に対応しました。
+- 会議単位簡易出力, 会議単位出力, 発言単位出力 に対応しています。
+- 任意検索条件の再帰的全件取得に対応しています。
+  - `iter`パッケージを利用しています。
+- APIコールの時間間隔の調整が可能です。
+- すべての検索用パラメータに対応しています。（2024/04/25時点）
 
-すべての検索用パラメータとすべてのAPIレスポンスの型に対応しています。
-(2024/04/25時点)
+## Install
+
+```shell
+go get "github.com/yyyoichi/kokkai-api"
+```
 
 ## Example
 
 ```golang
-// 国会議事録にヒットする初めの10件の会議情報を取得する。
-var params = NewParam()
-params.Any("国会議事録")
-params.MaximumRecords(100)
-result := GetKaigi(http.DefaultClient, params)
-if result.Err != nil {
-    return result.Err
-}
-fmt.Println(result.Result.NumberOfReturn) // 返戻件数
-```
+import (
+    "fmt"
+    "log"
 
-### 検索条件についてすべて取得する
+    kokkaiapi "github.com/yyyoichi/kokkai-api"
+)
 
-```golang
-// 国会議事録にヒットする発言をすべて取得する。
-var params = NewParam()
-params.Any("国会議事録")
-params.MaximumRecords(100)
-client := &Client[*HatsugenResult]{
-    HTTPClient: http.DefaultClient,
-    Get:        GetHatsugen,
-    Interval:   time.Duration(1) * time.Second,
-}
-for result := range client.GetAll(context.Background(), params) {
-    fmt.Println(result.Result.NumberOfReturn) // 返戻件数
+func main() {
+    // 国会回次209の科学技術に関する議事録を「会議単位簡易出力」で最大3件ずつ、再帰的に取得する。
+    p := kokkaiapi.NewParam()
+    p.Any("科学技術")
+    p.RecordPacking("json")
+    p.SessionFrom(209)
+    p.SessionTo(209)
+    p.MaximumRecords(3)
+    // exp return 7 records
+    for result, err := range kokkaiapi.IterKaniResult(p) {
+        if err != nil {
+            log.Fatal(err)
+        }
+        fmt.Println("numberOfReturn", result.NumberOfReturn)
+    }
+
+    // Output:
+    // numberOfReturn 3
+    // numberOfReturn 3
+    // numberOfReturn 1
 }
 ```
