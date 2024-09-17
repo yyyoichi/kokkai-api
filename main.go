@@ -39,7 +39,7 @@ func IterHatsugenResult(p Param) iter.Seq2[*HatsugenResult, error] {
 
 func IterResult[T result](p Param, r Request[T]) iter.Seq2[T, error] {
 	return func(yield func(T, error) bool) {
-		nextPosCh := make(chan int)
+		nextPosCh := make(chan int, 1)
 		ctx, cancel := context.WithCancel(context.Background())
 
 		defer close(nextPosCh)
