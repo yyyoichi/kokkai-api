@@ -29,6 +29,14 @@ func IterKaniResult(p Param) iter.Seq2[*KaniResult, error] {
 	return IterResult(p, DefaultKaniRequest)
 }
 
+func IterKaigiResult(p Param) iter.Seq2[*KaigiResult, error] {
+	return IterResult(p, DefaultKaigiRequest)
+}
+
+func IterHatsugenResult(p Param) iter.Seq2[*HatsugenResult, error] {
+	return IterResult(p, DefaultHatsugenRequest)
+}
+
 func IterResult[T result](p Param, r Request[T]) iter.Seq2[T, error] {
 	return func(yield func(T, error) bool) {
 		nextPosCh := make(chan int)
