@@ -59,8 +59,15 @@ func NewParam() Param {
 }
 
 func (p *Param) encode() string {
-	p.values.Add("recordPacking", "json")
-	return p.values.Encode()
+	// 呼び出しのたびにvaluesへ追加すると、全件取得でページをまたぐごとに
+	// recordPackingパラメータが重複してしまう。Paramを変更しないようコピーに設定する。
+	values := make(url.Values, len(p.values)+1)
+	for k, vs := range p.values {
+		values[k] = append([]string(nil), vs...)
+	}
+	// レスポンスはjsonとしてパースするため、recordPackingはjsonに固定する
+	values.Set("recordPacking", "json")
+	return values.Encode()
 }
 
 // 開始位置	検索結果の取得開始位置を「1～検索件数」の範囲で指定可能。
